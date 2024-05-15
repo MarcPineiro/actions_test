@@ -1,0 +1,26 @@
+name: "Build"
+run-name: "Build GDPR"
+
+on:
+  push:
+    branches:
+      - master
+  pull_request_target:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      target-branch:
+        type: string
+        default: "master"
+        description: "Branch name to build and publish"
+
+jobs:
+  build-service:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Error
+        if: ${{ !failure() && github.event_name != 'pull_request_target' }}
+        run: |
+          echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
